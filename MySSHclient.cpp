@@ -11,6 +11,9 @@
 
 
 int port=2024;
+int login=0;;
+int lenght;
+char sConsola[256];
 
 int main (int argc, char *argv[])
 {
@@ -33,15 +36,19 @@ int main (int argc, char *argv[])
       perror ("[client]Eroare la connect().\n");
       return errno;
     }
-  memset(msg,0, 256);
-  read(0,msg,256);
-  if(strchr(msg,'\n'))
-    strchr(msg,'\n')[0]=0;
-  if (write (sd, msg, 256) <= 0)
-    {
-      perror ("[client]Eroare la write() spre server.\n");
-      return errno;
-    }
+  while (!login)
+        {
+            printf("login : ");
+            memset(sConsola,0,sizeof(sConsola));
+            scanf("%s",sConsola);
+            lenght=strlen(sConsola);
+            write(sd,&lenght,sizeof(int));
+            write(sd,sConsola,lenght);
+            read(sd,&login,sizeof(int));
+            if(!login)
+                printf("Username Incorect \n");
+        }
+        printf("Logat!\n");
 
   close (sd);
 }

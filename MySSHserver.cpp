@@ -10,14 +10,19 @@
 #define PORT 2024
 #define MAXNR 1000
 
+//////threads
 static void* thread_main( void* arg);
 struct thread_inf
 {
 	int sockd;
     int index;
 };
-
 pthread_t threads[MAXNR];
+
+////////variabile
+int login=0;
+int lenght;
+char sConsola[256],sFisier[256];
 
 int main ()
 {
@@ -74,10 +79,23 @@ void* thread_main( void* arg)
     char msg[256];
     thread_inf ld;
     ld=*((thread_inf*)arg);
-    memset(msg,0, 256);
-    read(ld.sockd,msg,256);
-    printf("Threadul %d a afisat %s\n", ld.index, msg);
-    fflush(stdout);
+    while(!login)
+    {
+        read(ld.sockd,&lenght,sizeof(int));
+        memset(sConsola,0, sizeof(sConsola));
+        read(ld.sockd,sConsola,lenght);
+            FILE* fin=fopen("login.txt","r");
+            while(!feof(fin)){
+                fgets(sFisier,300,fin);
+                sFisier[strlen(sFisier)-1]=0;
+                if(strcmp(sConsola,sFisier)==0){
+                     login=1;
+                     break;
+                    }
+            }
+            fclose(fin);
+            write(ld.sockd,&login,sizeof(int));
+    }
     close(ld.sockd);
     return nullptr;
 }
