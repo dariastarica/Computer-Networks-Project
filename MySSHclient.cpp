@@ -11,9 +11,10 @@
 
 
 int port=2024;
-int login=0;;
+int login=0,ok=0,folder=0;
 int lenght;
-char sConsola[256];
+char sConsolaUsername[256],sConsolaParola[256];
+char comanda[256],path[256];
 
 int main (int argc, char *argv[])
 {
@@ -39,16 +40,44 @@ int main (int argc, char *argv[])
   while (!login)
         {
             printf("login : ");
-            memset(sConsola,0,sizeof(sConsola));
-            scanf("%s",sConsola);
-            lenght=strlen(sConsola);
+            memset(sConsolaUsername,0,sizeof(sConsolaUsername));
+            scanf("%s",sConsolaUsername);
+            lenght=strlen(sConsolaUsername);
             write(sd,&lenght,sizeof(int));
-            write(sd,sConsola,lenght);
+            write(sd,sConsolaUsername,lenght);
             read(sd,&login,sizeof(int));
-            if(!login)
+            if(!login){
                 printf("Username Incorect \n");
+            }
         }
-        printf("Logat!\n");
-
+    login=0;
+    while(!login)
+    {
+      printf("Parola: ");
+      memset(sConsolaParola,0,sizeof(sConsolaParola));
+      scanf("%s",sConsolaParola);
+      lenght=strlen(sConsolaParola);
+      write(sd,&lenght,sizeof(int));
+      write(sd,sConsolaParola,lenght);
+      read(sd,&login,sizeof(int));
+      if(!login)
+          printf("Parola Incorecta \n");
+    }
+    printf("Logat!\n");
+    while(ok==0){
+            memset(comanda,0,sizeof(comanda));
+            scanf("%s",comanda);
+            lenght=strlen(comanda);
+            write(sd,&lenght,sizeof(int));
+            write(sd,comanda,lenght);
+            if(strcmp(comanda,"myfind")==0 || strcmp(comanda,"mystat")==0){
+                memset(path,0,sizeof(path));
+                scanf(" %s",path);
+                lenght=strlen(path);
+                write(sd,&lenght,sizeof(int));
+                write(sd,path,lenght);
+            }
+            read(sd,&ok,sizeof(int));
+        }
   close (sd);
 }
