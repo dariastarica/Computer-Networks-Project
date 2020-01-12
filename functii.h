@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <string.h>
 
 void find(char* path, char* currentPath, char result[]){
     char* adresa;
@@ -67,4 +68,30 @@ void cd (char* path,char result[])
     strcpy(result,"Directorul curent a fost schimbat in ");
     strcat(result,path);
     chdir(path);
+}
+
+void cript(char text[])
+{ 
+    int lg;
+    lg=strlen(text);
+    for (int i=0;i<lg;i++) 
+    { 
+        if (text[i]<='Z' && text[i]>='A') 
+            text[i]=(char)(((int)text[i]-65+4)%26+65);
+        else if(text[i]<='z' && text[i]>='a')
+                text[i]=(char)(((int)text[i]-97+4)%26 +97);
+    } 
+}
+
+ void decript(char text[])
+{
+    int lg;
+    lg=strlen(text);
+    for (int i=0;i<lg;i++) 
+    { 
+        if (text[i]<='Z' && text[i]>='A') 
+            text[i]=(char)(((int)text[i]-65-4)%26+65);
+        else if(text[i]<='z' && text[i]>='a')
+                text[i]=(char)(((int)text[i]-97-4)%26 +97);
+    } 
 }

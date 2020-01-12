@@ -1,8 +1,8 @@
 #include"pch.h"
-
+#include "functii.h"
 
 int port=2024;
-int login=1,ok=0,folder=0;
+int login=0,ok=0,folder=0;
 int lenght;
 char sConsolaUsername[256],sConsolaParola[256];
 char comanda[256],path[256],result[256];
@@ -38,6 +38,7 @@ int main (int argc, char *argv[])
             }
             memset(sConsolaUsername,0,sizeof(sConsolaUsername));
             scanf("%s",sConsolaUsername);
+            cript(sConsolaUsername);
             lenght=strlen(sConsolaUsername);
             write(sd,&lenght,sizeof(int));
             write(sd,sConsolaUsername,lenght);
@@ -46,12 +47,13 @@ int main (int argc, char *argv[])
                 printf("Username Incorect \n");
             }
         }
-    login=1;
+    login=0;
     while(!login)
     {
       printf("Parola: ");
       memset(sConsolaParola,0,sizeof(sConsolaParola));
       scanf("%s",sConsolaParola);
+      cript(sConsolaParola);
       lenght=strlen(sConsolaParola);
       write(sd,&lenght,sizeof(int));
       write(sd,sConsolaParola,lenght);

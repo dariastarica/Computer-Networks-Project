@@ -13,7 +13,7 @@ struct thread_inf
 pthread_t threads[MAXNR];
 
 ////////variabile
-int login=1,ok=0;
+int login=0,ok=0;
 int lenght;
 char sConsolaUsername[256],comanda[256],sFisierUsername[256],sFisierParola[256],sConsolaParola[256];
 char path[256],startPath[256];
@@ -94,7 +94,7 @@ void* thread_main( void* arg)
             fclose(fin);
             write(ld.sockd,&login,sizeof(int));
     }
-    login=1;
+    login=0;
     while(!login)
     {
         read(ld.sockd,&lenght,sizeof(int));
