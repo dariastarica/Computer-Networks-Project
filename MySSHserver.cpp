@@ -1,22 +1,5 @@
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <errno.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <sys/wait.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <dirent.h>
-#include <pwd.h>
-#include <stdbool.h>
-#include <time.h>
+#include "pch.h"
+#include "functii.h"
 #define PORT 2024
 #define MAXNR 1000
 
@@ -30,15 +13,12 @@ struct thread_inf
 pthread_t threads[MAXNR];
 
 ////////variabile
-int login=1,ok=0,folder=0;
+int login=1,ok=0;
 int lenght;
 char sConsolaUsername[256],comanda[256],sFisierUsername[256],sFisierParola[256],sConsolaParola[256];
 char path[256],startPath[256];
 char t[256];
 char result[256];
-
-///////functii
-void find(char* path, char* currentPath,char result[]);
 
 int main ()
 {
@@ -131,53 +111,31 @@ void* thread_main( void* arg)
         read(ld.sockd,&lenght,sizeof(int));
         memset(comanda,0,sizeof(comanda));
         read(ld.sockd,comanda,lenght);
-        memset(path,0,sizeof(path));
-        read(ld.sockd,&lenght,sizeof(int));
-        read(ld.sockd,path,lenght);
         if (strcmp(comanda,"quit")==0){
                     break;
                 }
-            if(strcmp(comanda,"find")==0){
-                strcpy(startPath,"/home/daria");
-                find(path,startPath,result);
-                write(ld.sockd,result,256);
+        if(strcmp(comanda,"find")==0){
+            memset(path,0,sizeof(path));
+            read(ld.sockd,&lenght,sizeof(int));
+            read(ld.sockd,path,lenght);
+            strcpy(startPath,"/home/daria");
+            find(path,startPath,result);
+            write(ld.sockd,result,256);
             }
+        if(strcmp(comanda,"pwd")==0){
+            pwd(result);
+            write(ld.sockd,result,256);
+        }
+        if(strcmp(comanda,"ls")==0)
+        {
+            ls(result);
+            write(ld.sockd,result,256);
+        }
+        /*if(strcmp(comanda,"")==0)
+        {
+
+        }*/
     }
     close(ld.sockd);
     return nullptr;
-}
-
-void find(char* path, char* currentPath, char result[]){
-    char* adresa;
-    char nextPath[300];
-    DIR* currentDir;
-    struct dirent* d;
-    struct stat st;
-    if((adresa = strstr(currentPath,path))!=NULL){
-        if(*(adresa-1) == '/' && *(adresa+strlen(path))==0){
-            //printf("%s\n",currentPath);
-            strcpy(result,currentPath);
-            return;
-        }
-        
-    }
-    stat(currentPath,&st);
-    if((st.st_mode & S_IFMT) == S_IFDIR){
-        folder=1;
-    }
-    else 
-        return;
-    currentDir=opendir(currentPath);
-    if(currentDir == NULL)
-        return;
-    while(d=readdir(currentDir)){
-        d->d_name;
-        if(strcmp(d->d_name,".")==0 || strcmp(d->d_name,"..")==0)
-            continue;
-        memset(nextPath,0,300);
-        strcpy(nextPath,currentPath);
-        strcat(nextPath,"/");
-        strcat(nextPath,d->d_name);
-        find(path,nextPath,result);
-    }
 }

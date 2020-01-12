@@ -1,13 +1,4 @@
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <errno.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <netdb.h>
-#include <string.h>
-#include <arpa/inet.h>
+#include"pch.h"
 
 
 int port=2024;
@@ -85,8 +76,19 @@ int main (int argc, char *argv[])
                 read(sd,result,256);
                 printf("%s\n",result);
             }
+            if(strcmp(comanda,"pwd")==0)
+            {
+              read(sd,result,256);
+              printf("%s\n",result);
+            }
             if(strcmp(comanda,"quit")==0)
               break;
+            if(strcmp(comanda,"ls")==0)
+            {
+              read(sd,result,256);
+              result[strlen(result)-1]=0;
+              printf("%s\n",result);
+            }
         }
   close (sd);
 }
