@@ -140,9 +140,8 @@ void* thread_main( void* arg)
             if(strcmp(comanda,"find")==0){
                 strcpy(startPath,"/home/daria");
                 find(path,startPath,result);
-                
+                write(ld.sockd,result,256);
             }
-        write(ld.sockd,result,256);
     }
     close(ld.sockd);
     return nullptr;
@@ -156,7 +155,7 @@ void find(char* path, char* currentPath, char result[]){
     struct stat st;
     if((adresa = strstr(currentPath,path))!=NULL){
         if(*(adresa-1) == '/' && *(adresa+strlen(path))==0){
-            printf("%s\n",currentPath);
+            //printf("%s\n",currentPath);
             strcpy(result,currentPath);
             return;
         }

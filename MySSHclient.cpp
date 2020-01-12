@@ -81,11 +81,12 @@ int main (int argc, char *argv[])
                 lenght=strlen(path);
                 write(sd,&lenght,sizeof(int));
                 write(sd,path,lenght);
+                //afisarea resultatului
+                read(sd,result,256);
+                printf("%s\n",result);
             }
-            read(sd,result,256);
-            printf("%s\n",result);
-            //fflush(stdout);
-            break;
+            if(strcmp(comanda,"quit")==0)
+              break;
         }
   close (sd);
 }
