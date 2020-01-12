@@ -39,7 +39,12 @@ int main (int argc, char *argv[])
     }
   while (!login)
         {
-            printf("login : ");
+            memset(sConsolaUsername,0,sizeof(sConsolaUsername));
+            scanf("%s",sConsolaUsername);
+            if(strcmp(sConsolaUsername,"ssh-d")){
+                printf("ssh-d pls\n");
+                continue;
+            }
             memset(sConsolaUsername,0,sizeof(sConsolaUsername));
             scanf("%s",sConsolaUsername);
             lenght=strlen(sConsolaUsername);
