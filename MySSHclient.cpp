@@ -11,10 +11,10 @@
 
 
 int port=2024;
-int login=0,ok=0,folder=0;
+int login=1,ok=0,folder=0;
 int lenght;
 char sConsolaUsername[256],sConsolaParola[256];
-char comanda[256],path[256];
+char comanda[256],path[256],result[256];
 
 int main (int argc, char *argv[])
 {
@@ -55,7 +55,7 @@ int main (int argc, char *argv[])
                 printf("Username Incorect \n");
             }
         }
-    login=0;
+    login=1;
     while(!login)
     {
       printf("Parola: ");
@@ -69,20 +69,23 @@ int main (int argc, char *argv[])
           printf("Parola Incorecta \n");
     }
     printf("Logat!\n");
-    while(ok==0){
+    while(1){
             memset(comanda,0,sizeof(comanda));
             scanf("%s",comanda);
             lenght=strlen(comanda);
             write(sd,&lenght,sizeof(int));
             write(sd,comanda,lenght);
-            if(strcmp(comanda,"myfind")==0 || strcmp(comanda,"mystat")==0){
+            if(strcmp(comanda,"find")==0 || strcmp(comanda,"mystat")==0){
                 memset(path,0,sizeof(path));
                 scanf(" %s",path);
                 lenght=strlen(path);
                 write(sd,&lenght,sizeof(int));
                 write(sd,path,lenght);
             }
-            read(sd,&ok,sizeof(int));
+            read(sd,result,256);
+            printf("%s\n",result);
+            //fflush(stdout);
+            break;
         }
   close (sd);
 }

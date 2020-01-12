@@ -30,15 +30,16 @@ struct thread_inf
 pthread_t threads[MAXNR];
 
 ////////variabile
-int login=0,ok=0,folder=0;
+int login=1,ok=0,folder=0;
 int lenght;
 char sConsolaUsername[256],comanda[256],sFisierUsername[256],sFisierParola[256],sConsolaParola[256];
 char path[256],startPath[256];
 char t[256];
+char result[256];
 
 ///////functii
-void myfind(char* path, char* currentPath);
-void mystat(char* path);
+void find(char* path, char* currentPath,char result[]);
+
 int main ()
 {
     struct sockaddr_in server;	// structura folosita de server
@@ -113,7 +114,7 @@ void* thread_main( void* arg)
             fclose(fin);
             write(ld.sockd,&login,sizeof(int));
     }
-    login=0;
+    login=1;
     while(!login)
     {
         read(ld.sockd,&lenght,sizeof(int));
@@ -125,7 +126,7 @@ void* thread_main( void* arg)
         write(ld.sockd,&login,sizeof(int));
     }
 
-    while(!ok)
+    while(1)
     {
         read(ld.sockd,&lenght,sizeof(int));
         memset(comanda,0,sizeof(comanda));
@@ -134,22 +135,20 @@ void* thread_main( void* arg)
         read(ld.sockd,&lenght,sizeof(int));
         read(ld.sockd,path,lenght);
         if (strcmp(comanda,"quit")==0){
-                    ok=1;
+                    break;
                 }
-            if(strcmp(comanda,"myfind")==0){
+            if(strcmp(comanda,"find")==0){
                 strcpy(startPath,"/home/daria");
-                myfind(path,startPath);
+                find(path,startPath,result);
+                
             }
-            if(strcmp(comanda,"mystat")==0){
-                mystat(path);
-            }
-            write(ld.sockd,&ok,sizeof(int));
+        write(ld.sockd,result,256);
     }
     close(ld.sockd);
     return nullptr;
 }
 
-void myfind(char* path, char* currentPath){
+void find(char* path, char* currentPath, char result[]){
     char* adresa;
     char nextPath[300];
     DIR* currentDir;
@@ -158,6 +157,7 @@ void myfind(char* path, char* currentPath){
     if((adresa = strstr(currentPath,path))!=NULL){
         if(*(adresa-1) == '/' && *(adresa+strlen(path))==0){
             printf("%s\n",currentPath);
+            strcpy(result,currentPath);
             return;
         }
         
@@ -179,44 +179,6 @@ void myfind(char* path, char* currentPath){
         strcpy(nextPath,currentPath);
         strcat(nextPath,"/");
         strcat(nextPath,d->d_name);
-        myfind(path,nextPath);
+        find(path,nextPath,result);
     }
-}
-
-void mystat(char* path){
-    struct stat st;
-    char perm[10]="---------"; 
-    if(stat(path,&st)!=0){
-        return; 
-    }
-    printf("file type: ");
-    long time;
-    struct tm timestamp;
-    switch(st.st_mode & S_IFMT)
-    {
-        case S_IFDIR : printf("Director\n"); break;
-        case S_IFREG : printf("Fisier obisnuit\n"); break;
-        case S_IFLNK : printf("Link\n"); break;
-        case S_IFIFO : printf("FIFO\n"); break;
-        case S_IFSOCK: printf("Socket\n"); break;
-        default: printf("Unknown file type");
-    }
-    printf("file size: %lld\n",(long long)st.st_size);
-
-    if(S_IRUSR & st.st_mode) perm[0]='r';
-    if(S_IWUSR & st.st_mode) perm[1]='w';
-    if(S_IXUSR & st.st_mode) perm[2]='x';
-    if(S_IRGRP & st.st_mode) perm[3]='r';
-    if(S_IWGRP & st.st_mode) perm[4]='w';
-    if(S_IXGRP & st.st_mode) perm[5]='x';
-    if(S_IROTH & st.st_mode) perm[6]='r';
-    if(S_IWOTH & st.st_mode) perm[7]='w';
-    if(S_IXOTH & st.st_mode) perm[8]='x';
-    printf("permissions: %s\n",perm);
-
-    time=st.st_atime;
-    localtime_r(&time,&timestamp);
-    strftime(t,300, "%c", &timestamp);
-    printf("%s\n",t);
-    fflush(stdout);
 }
