@@ -68,6 +68,7 @@ int main (int argc, char *argv[])
             write(sd,comanda,lenght);
             if(strcmp(comanda,"find")==0 || strcmp(comanda,"mystat")==0){
                 memset(path,0,sizeof(path));
+                memset(result,0,sizeof(result));
                 scanf(" %s",path);
                 lenght=strlen(path);
                 write(sd,&lenght,sizeof(int));
@@ -78,6 +79,7 @@ int main (int argc, char *argv[])
             }
             if(strcmp(comanda,"pwd")==0)
             {
+              memset(result,0,sizeof(result));
               read(sd,result,256);
               printf("%s\n",result);
             }
@@ -85,8 +87,20 @@ int main (int argc, char *argv[])
               break;
             if(strcmp(comanda,"ls")==0)
             {
+              memset(result,0,sizeof(result));
               read(sd,result,256);
               result[strlen(result)-1]=0;
+              printf("%s\n",result);
+            }
+            if(strcmp(comanda,"cd")==0)
+            {
+              memset(path,0,sizeof(path));
+              memset(result,0,sizeof(result));
+              scanf(" %s",path);
+              lenght=strlen(path);
+              write(sd,&lenght,sizeof(int));
+              write(sd,path,lenght);
+              read(sd,result,256);
               printf("%s\n",result);
             }
         }

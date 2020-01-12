@@ -131,10 +131,14 @@ void* thread_main( void* arg)
             ls(result);
             write(ld.sockd,result,256);
         }
-        /*if(strcmp(comanda,"")==0)
+        if(strcmp(comanda,"cd")==0)
         {
-
-        }*/
+            memset(path,0,sizeof(path));
+            read(ld.sockd,&lenght,sizeof(int));
+            read(ld.sockd,path,lenght);
+            cd(path,result);
+            write(ld.sockd,result,256);
+        }
     }
     close(ld.sockd);
     return nullptr;

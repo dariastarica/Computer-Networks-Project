@@ -59,8 +59,12 @@ void ls(char result[])
             continue;
         strcat(result,d->d_name);
         strcat(result,"\n");
-        if(strcmp(d->d_name,".")==0 || strcmp(d->d_name,"..")==0)
-            continue;
     }
-    
+}
+
+void cd (char* path,char result[])
+{
+    strcpy(result,"Directorul curent a fost schimbat in ");
+    strcat(result,path);
+    chdir(path);
 }
