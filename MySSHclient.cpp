@@ -33,7 +33,7 @@ int main (int argc, char *argv[])
             memset(sConsolaUsername,0,sizeof(sConsolaUsername));
             scanf("%s",sConsolaUsername);
             if(strcmp(sConsolaUsername,"ssh-d")){
-                printf("ssh-d pls\n");
+                printf("Comanda trebuie sa inceapa cu \"ssh-d\"\n");
                 continue;
             }
             memset(sConsolaUsername,0,sizeof(sConsolaUsername));
@@ -114,6 +114,17 @@ int main (int argc, char *argv[])
               read(sd,result,256);
               printf("%s\n",result);
             }
+            else if(strcmp(comanda,"rm")==0)
+            {
+              memset(path,0,sizeof(path));
+              memset(result,0,sizeof(result));
+              scanf(" %s",path);
+              lenght=strlen(path);
+              write(sd,&lenght,sizeof(int));
+              write(sd,path,lenght);
+              read(sd,result,256);
+              printf("%s\n",result);
+            }
             else if(strcmp(comanda,";")==0)
                     continue;
             else if(strcmp(comanda,"&&")==0)
@@ -121,10 +132,27 @@ int main (int argc, char *argv[])
             else if(strcmp(comanda,"||")==0)
                     ;
             else if(strcmp(comanda,"|")==0)
-                    ;
+                    {
+                      
+                    }
             else if(strcmp(comanda,">")==0)
-                    ;
+                    {
+                      lenght=strlen(result);
+                      write(sd,&lenght,sizeof(int));
+                      write(sd,result,lenght);
+
+                      memset(path,0,sizeof(path));
+                      memset(result,0,256);
+                      scanf(" %s",path);
+                      lenght=strlen(path);
+                      write(sd,&lenght,sizeof(int));
+                      write(sd,path,lenght);
+                      read(sd,result,256);
+                      //printf("%s\n",result);
+                    }
             else if(strcmp(comanda,"<")==0)
+                    ;
+            else if(strcmp(comanda,"2>")==0)
                     ;
             else printf("Comanda Incorecta\n");
             memset(comanda,0,sizeof(comanda));

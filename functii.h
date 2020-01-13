@@ -99,10 +99,27 @@ void cript(char text[])
 void touch(char nume[],char result[])
 {
     FILE* fileptr;
-    char numefis[256];
-    pwd(numefis);
-    fileptr=fopen("numefis","w");
+    fileptr=fopen(nume,"w");
     if(!fileptr)
         strcpy(result,"Eroare la crearea fisierului!");
     strcpy(result,"Fisier creat!");
+}
+
+void rm (char nume[],char result[])
+{
+    if(remove(nume)==0)
+        strcpy(result,"Fisier sters!");
+    else 
+        strcpy(result,"Eroare la stergerea fisierului!");
+}
+
+void maimare(char* path,char result[])
+{
+    FILE* fileptr;
+
+    fileptr=fopen(path,"w+");
+    fputs(result,fileptr);
+    fclose(fileptr);
+    if(fileptr==NULL)
+        strcpy(result,"Eroare la copiere");
 }

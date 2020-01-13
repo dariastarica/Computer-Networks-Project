@@ -147,6 +147,25 @@ void* thread_main( void* arg)
             touch(path,result);
             write(ld.sockd,result,256);
         }
+        if(strcmp(comanda,"rm")==0)
+        {
+            memset(path,0,sizeof(path));
+            read(ld.sockd,&lenght,sizeof(int));
+            read(ld.sockd,path,lenght);
+            rm(path,result);
+            write(ld.sockd,result,256);
+        }
+        if(strcmp(comanda,">")==0)
+        {
+            read(ld.sockd,&lenght,sizeof(int));
+            read(ld.sockd,result,lenght);
+
+            memset(path,0,sizeof(path));
+            read(ld.sockd,&lenght,sizeof(int));
+            read(ld.sockd,path,lenght);
+            maimare(path,result);
+            write(ld.sockd,result,256);
+        }
     }
     close(ld.sockd);
     return nullptr;
