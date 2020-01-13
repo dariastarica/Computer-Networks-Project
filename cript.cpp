@@ -18,11 +18,13 @@ void cript(char text[])
     } 
 }
 
-char text[256],cripttext[256];
+char text[256],cripttext[256],next[10];
 int main()
 {
     scanf("%s",text);
     cript(text);
-    printf("%s\n",text);
+    scanf("%s",next);
+    if(strcmp(next,"\n")==0)
+        printf("%s\n",text);
     //fflush(stdout);
 }

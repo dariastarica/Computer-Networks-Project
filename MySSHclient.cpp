@@ -62,9 +62,7 @@ int main (int argc, char *argv[])
           printf("Parola Incorecta \n");
     }
     printf("Logat!\n");
-    while(1){
-            memset(comanda,0,sizeof(comanda));
-            scanf("%s",comanda);
+    while(scanf("%s",comanda)){
             lenght=strlen(comanda);
             write(sd,&lenght,sizeof(int));
             write(sd,comanda,lenght);
@@ -79,22 +77,22 @@ int main (int argc, char *argv[])
                 read(sd,result,256);
                 printf("%s\n",result);
             }
-            if(strcmp(comanda,"pwd")==0)
+             else if(strcmp(comanda,"pwd")==0)
             {
               memset(result,0,sizeof(result));
               read(sd,result,256);
               printf("%s\n",result);
             }
-            if(strcmp(comanda,"quit")==0)
+            else if(strcmp(comanda,"quit")==0)
               break;
-            if(strcmp(comanda,"ls")==0)
+            else if(strcmp(comanda,"ls")==0)
             {
               memset(result,0,sizeof(result));
               read(sd,result,256);
               result[strlen(result)-1]=0;
               printf("%s\n",result);
             }
-            if(strcmp(comanda,"cd")==0)
+            else if(strcmp(comanda,"cd")==0)
             {
               memset(path,0,sizeof(path));
               memset(result,0,sizeof(result));
@@ -105,6 +103,31 @@ int main (int argc, char *argv[])
               read(sd,result,256);
               printf("%s\n",result);
             }
+            else if(strcmp(comanda,"touch")==0)
+            {
+              memset(path,0,sizeof(path));
+              memset(result,0,sizeof(result));
+              scanf(" %s",path);
+              lenght=strlen(path);
+              write(sd,&lenght,sizeof(int));
+              write(sd,path,lenght);
+              read(sd,result,256);
+              printf("%s\n",result);
+            }
+            else if(strcmp(comanda,";")==0)
+                    continue;
+            else if(strcmp(comanda,"&&")==0)
+                    ;
+            else if(strcmp(comanda,"||")==0)
+                    ;
+            else if(strcmp(comanda,"|")==0)
+                    ;
+            else if(strcmp(comanda,">")==0)
+                    ;
+            else if(strcmp(comanda,"<")==0)
+                    ;
+            else printf("Comanda Incorecta\n");
+            memset(comanda,0,sizeof(comanda));
         }
   close (sd);
 }

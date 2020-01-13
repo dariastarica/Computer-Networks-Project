@@ -139,6 +139,14 @@ void* thread_main( void* arg)
             cd(path,result);
             write(ld.sockd,result,256);
         }
+        if(strcmp(comanda,"touch")==0)
+        {
+            memset(path,0,sizeof(path));
+            read(ld.sockd,&lenght,sizeof(int));
+            read(ld.sockd,path,lenght);
+            touch(path,result);
+            write(ld.sockd,result,256);
+        }
     }
     close(ld.sockd);
     return nullptr;

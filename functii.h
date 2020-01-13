@@ -95,3 +95,14 @@ void cript(char text[])
                 text[i]=(char)(((int)text[i]-97-4)%26 +97);
     } 
 }
+
+void touch(char nume[],char result[])
+{
+    FILE* fileptr;
+    char numefis[256];
+    pwd(numefis);
+    fileptr=fopen("numefis","w");
+    if(!fileptr)
+        strcpy(result,"Eroare la crearea fisierului!");
+    strcpy(result,"Fisier creat!");
+}
