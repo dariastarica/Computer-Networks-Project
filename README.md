@@ -1,2 +1,3 @@
 # retele
-MySSH
+Tema1 (login + mystat, myfind) 
+Proiect: MySSH
