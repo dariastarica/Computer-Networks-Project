@@ -1,3 +1,3 @@
-# retele
-Tema1 (login + mystat, myfind) 
-Proiect: MySSH
+# Computer Networks
+Project: MySSH
+A fully working SSH written in C and C++ 
